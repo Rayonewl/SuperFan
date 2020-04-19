@@ -4,59 +4,59 @@
 #include "timer.h"
 #include "ds18b20.h"
 
- int pwmval,flag=0;//pwmvalÓÃÓÚ´æ·ÅÉèÖÃÕ¼¿Õ±ÈµÄ±È½ÏÖµ£¬flagÎªÄ£Ê½±êÖ¾Î»
- int temperature;  //ÓÃÓÚ´æ·Å´ÓDS18B20»ñÈ¡µ½µÄÎÂ¶È
+ int pwmval,flag=0;//pwmvalç”¨äºå­˜æ”¾è®¾ç½®å ç©ºæ¯”çš„æ¯”è¾ƒå€¼ï¼Œflagä¸ºæ¨¡å¼æ ‡å¿—ä½
+ int temperature;  //ç”¨äºå­˜æ”¾ä»DS18B20è·å–åˆ°çš„æ¸©åº¦
  int main(void)
  {
-	Stm32_Clock_Init(9);            					//ÏµÍ³Ê±ÖÓÉèÖÃ
-	delay_init(72);                					    //ÑÓÊ±³õÊ¼»¯
-	JTAG_Set(JTAG_SWD_DISABLE);     					//¹Ø±ÕJTAG½Ó¿Ú
-	JTAG_Set(SWD_ENABLE);           					//´ò¿ªSWD½Ó¿Ú ¿ÉÒÔÀûÓÃÖ÷°åµÄSWD½Ó¿Úµ÷ÊÔ
-	KEY_Init(); 	 									//°´¼ü³õÊ¼»¯
-	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2); 	//ÉèÖÃNVICÖĞ¶Ï·Ö×é2:2Î»ÇÀÕ¼ÓÅÏÈ¼¶£¬2Î»ÏìÓ¦ÓÅÏÈ¼¶
- 	L298N_Init();			     						//L298N¶Ë¿Ú³õÊ¼»¯
+	Stm32_Clock_Init(9);            					//ç³»ç»Ÿæ—¶é’Ÿè®¾ç½®
+	delay_init(72);                					    //å»¶æ—¶åˆå§‹åŒ–
+	JTAG_Set(JTAG_SWD_DISABLE);     					//å…³é—­JTAGæ¥å£
+	JTAG_Set(SWD_ENABLE);           					//æ‰“å¼€SWDæ¥å£ å¯ä»¥åˆ©ç”¨ä¸»æ¿çš„SWDæ¥å£è°ƒè¯•
+	KEY_Init(); 	 									//æŒ‰é”®åˆå§‹åŒ–
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2); 	//è®¾ç½®NVICä¸­æ–­åˆ†ç»„2:2ä½æŠ¢å ä¼˜å…ˆçº§ï¼Œ2ä½å“åº”ä¼˜å…ˆçº§
+ 	L298N_Init();			     						//L298Nç«¯å£åˆå§‹åŒ–
 	OLED_Init();										
-	delay_ms(30);										//¸øoled³õÊ¼»¯Ò»µã»º³åÊ±¼ä
-	TIM3_Int_Init(999,7199);	 						//²»·ÖÆµ¡£PWMÆµÂÊ=72000000/900=80Khz
-	TIM4_PWM_Init(999,7199);							//PWM³õÊ¼»¯
-	uart_init(72,128000);           					//³õÊ¼»¯´®¿Ú1
+	delay_ms(30);										//ç»™oledåˆå§‹åŒ–ä¸€ç‚¹ç¼“å†²æ—¶é—´
+	TIM3_Int_Init(999,7199);	 						//ä¸åˆ†é¢‘ã€‚PWMé¢‘ç‡=72000000/900=80Khz
+	TIM4_PWM_Init(999,7199);							//PWMåˆå§‹åŒ–
+	uart_init(72,128000);           					//åˆå§‹åŒ–ä¸²å£1
 	OLED_ShowString(0,0,"Temp:   . C");
 	OLED_ShowString(0,14,"Fan:");
 	OLED_ShowString(0,30,"Mode:");
-    OLED_ShowString(0,45,"DS18B20:"); 
+        OLED_ShowString(0,45,"DS18B20:"); 
 	OLED_Refresh_Gram();
 	delay_ms(200);
  
  while(1)
 	{
-		while(DS18B20_Init())							//¼ì²âÎÂ¶È´«¸ĞÆ÷
+		while(DS18B20_Init())							//æ£€æµ‹æ¸©åº¦ä¼ æ„Ÿå™¨
 		{
-			OLED_ShowString(64,45,"Error"); 			//ÎÂ¶È´«¸ĞÆ÷²»´æÔÚ
+			OLED_ShowString(64,45,"Error"); 			//æ¸©åº¦ä¼ æ„Ÿå™¨ä¸å­˜åœ¨
 		}
-		OLED_ShowString(64,45,"OK"); 					//ÎÂ¶È´«¸ĞÆ÷´æÔÚ
+		OLED_ShowString(64,45,"OK"); 					//æ¸©åº¦ä¼ æ„Ÿå™¨å­˜åœ¨
 		OLED_Refresh_Gram();
 		delay_ms(200);
 		if(flag%2==0)
 		{
-			OLED_ShowString(40,30,"Human");				//½øÈë°´¼üÄ£Ê½
+			OLED_ShowString(40,30,"Human");				//è¿›å…¥æŒ‰é”®æ¨¡å¼
 			if(KEY1==0)
 			{
-				OLED_ShowNumber(40,14,1,1,12);			//Ò»µµ·çËÙ
+				OLED_ShowNumber(40,14,1,1,12);			//ä¸€æ¡£é£é€Ÿ
 				pwmval=300;
 			}
 			else if	(KEY2==0)
 			{
-				OLED_ShowNumber(40,14,2,1,12);			//¶şµµ·çËÙ
+				OLED_ShowNumber(40,14,2,1,12);			//äºŒæ¡£é£é€Ÿ
 				pwmval=600;
 			}
 			else if	(KEY3==0)
 			{
-				OLED_ShowNumber(40,14,3,1,12);			//Èıµµ·çËÙ
+				OLED_ShowNumber(40,14,3,1,12);			//ä¸‰æ¡£é£é€Ÿ
 				pwmval=999;
 			}
 			
 		}
-		TIM_SetCompare1(TIM4,pwmval);					//ÉèÖÃÕ¼¿Õ±È£¬Êä³öPWM
+		TIM_SetCompare1(TIM4,pwmval);					//è®¾ç½®å ç©ºæ¯”ï¼Œè¾“å‡ºPWM
 	}
  
  }
