@@ -1,22 +1,22 @@
 #include "l298n.h"
 
 /**************************
-³õÊ¼»¯PB0¡¢PB1£¬Ê¹ÄÜÊ±ÖÓ		    
-L298N IN1£¬IN2 ³õÊ¼»¯
+åˆå§‹åŒ–PB0ã€PB1ï¼Œä½¿èƒ½æ—¶é’Ÿ		    
+L298N IN1ï¼ŒIN2 åˆå§‹åŒ–
 /**************************/
 void L298N_Init(void)
 {
  
  GPIO_InitTypeDef  GPIO_InitStructure;
  	
- RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);	 //Ê¹ÄÜPB,PE¶Ë¿ÚÊ±ÖÓ
+ RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);	//ä½¿èƒ½PB,PEç«¯å£æ—¶é’Ÿ
 	
- GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0|GPIO_Pin_1;	 //PB0£¬1 ¶Ë¿ÚÅäÖÃ
- GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 		 //ÍÆÍìÊä³ö
- GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;		 //IO¿ÚËÙ¶ÈÎª50MHz
- GPIO_Init(GPIOB, &GPIO_InitStructure);					 //¸ù¾İÉè¶¨²ÎÊı³õÊ¼»¯GPIOB0£¬1
- GPIO_SetBits(GPIOB,GPIO_Pin_0);						 //PB.0 Êä³ö¸ß
- GPIO_ResetBits(GPIOB,GPIO_Pin_1); 						 //PE.1 Êä³ö¸ß 
+ GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0|GPIO_Pin_1;	//PB0ï¼Œ1 ç«¯å£é…ç½®
+ GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 	//æ¨æŒ½è¾“å‡º
+ GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;	//IOå£é€Ÿåº¦ä¸º50MHz
+ GPIO_Init(GPIOB, &GPIO_InitStructure);			//æ ¹æ®è®¾å®šå‚æ•°åˆå§‹åŒ–GPIOB0ï¼Œ1
+ GPIO_SetBits(GPIOB,GPIO_Pin_0);			//PB.0 è¾“å‡ºé«˜
+ GPIO_ResetBits(GPIOB,GPIO_Pin_1); 			//PE.1 è¾“å‡ºé«˜ 
 	
 }
  
